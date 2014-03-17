@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:sws="http://www.springframework.org/schema/web-services"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="person-service"
+		class="org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition"
+		p:portTypeName="Task" p:locationUri="/ws/" p:requestSuffix="-request"
+		p:responseSuffix="-response">
+		<property name="schema">
+			<bean class="org.springframework.xml.xsd.SimpleXsdSchema" p:xsd="classpath:/wsdl_desc.xsd" />
+		</property>
+	</bean>
+
+	<bean id="endpointMapping"
+		class="org.springframework.ws.server.endpoint.mapping.PayloadRootAnnotationMethodEndpointMapping">
+		<description>An endpoint mapping strategy that looks for @Endpoint and
+			@PayloadRoot
+			annotations.
+		</description>
+	</bean>
+	
+	
+
+	<bean id="messageDispatcher"
+		class="org.springframework.ws.soap.server.SoapMessageDispatcher">
+		<property name="endpointAdapters">
+			<list>
+				<ref bean="defaultMethodEndpointAdapter" />
+			</list>
+		</property>
+	</bean>
+
+
+	<bean id="messageFactory" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory" />
+
+	<bean id="defaultMethodEndpointAdapter"
+		class="org.springframework.ws.server.endpoint.adapter.DefaultMethodEndpointAdapter">
+		<property name="methodArgumentResolvers">
+			<list>
+				<ref bean="marshallingPayloadMethodProcessor" />
+			</list>
+		</property>
+		<property name="methodReturnValueHandlers">
+			<list>
+				<ref bean="marshallingPayloadMethodProcessor" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="marshallingPayloadMethodProcessor"
+		class="org.springframework.ws.server.endpoint.adapter.method.MarshallingPayloadMethodProcessor">
+		<constructor-arg ref="marshaller" />
+		<constructor-arg ref="marshaller" />
+	</bean>
+
+
+	<bean id="marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller"
+		p:contextPath="https.github_com.zarathustra616.sample.schema.beans">
+		<property name="contextPaths">
+			<list>
+				<value>https.github_com.zarathustra616.sample.schema.beans</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="personEndpoint" class="com.github.zarathustra616.webservice.endpoint.PersonServiceEndpoint">
+	</bean>
+
+ 	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/ws/.wsdl">person-service</prop>
+			</props>
+		</property>
+		<property name="defaultHandler" ref="messageDispatcher" />
+	</bean>
+	
+
+</beans>

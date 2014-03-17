@@ -1,0 +1,33 @@
+<xsd:schema xmlns="https://github.com/Zarathustra616/sample/schema/beans"
+	targetNamespace="https://github.com/Zarathustra616/sample/schema/beans" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<!-- elements that end with request and response will generate the wsdl. -->
+	<!-- log-task save/persist -->
+	<xsd:element name="add-person-request">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="person" type="person" minOccurs="1"
+					maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="add-person-response">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="person" type="person" minOccurs="1"
+					maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+		<!-- definition -->
+	<xsd:complexType name="person">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="age" type="xsd:long" />
+			<xsd:element name="cute" type="xsd:long" />
+			<xsd:element name="additional" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+</xsd:schema>
