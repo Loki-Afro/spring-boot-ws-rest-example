@@ -20,3 +20,9 @@ After executing the following command you shoudl have a jar that can run everywh
 ### Let the project run
 Will spring-boot tell to execute the application.
 ```mvn spring-boot:run```
+What is happening now? With the power of spring-boot this will run a tomcat listening to port 8080, by default.
+So simply go to http://localhost:8080/ to see your static-HTML content
+The SOAP Service - wsdl is available through http://localhost:8080/ws/person-service.wsdl
+You can throw the SOAP requests against this URL: http://localhost:8080/ws/ (for exmaple with SOAP UI) 
+
+###Have Fun
